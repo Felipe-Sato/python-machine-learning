@@ -1,2 +1,2 @@
-# python-csv-extractor
-Simple Python algorithm to convert CSV data into Python objects
+# python-machine-learning
+Simple series of Python algorithms to machine learning purposes.
