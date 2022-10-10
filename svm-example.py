@@ -1,34 +1,13 @@
-import pandas as pd
+from sklearn.datasets._samples_generator import make_blobs
+from matplotlib import pyplot as plt
 import numpy as np
-from sklearn import preprocessing
-from sklearn.preprocessing import LabelEncoder
-from sklearn.preprocessing import StandardScaler
-import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix
+from sklearn.svm import SVC
 
-df = pd.read_csv('Maths.csv', ";")
+X, y = make_blobs(n_samples=200, centers=2, cluster_std=0.60, random_state=0)
 
-nFeatures = ['school', 'sex', 'age', 'address', 'famsize', 'Pstatus', 'Medu', 'Fedu', 'Mjob', 'Fjob', 'reason',
-             'guardian', 'traveltime', 'studytime', 'failures', 'schoolsup', 'famsup', 'paid', 'activities', 'nursery',
-             'higher', 'internet', 'romantic', 'famrel', 'freetime', 'goout', 'Dalc', 'Walc', 'health', 'absences',
-             'G1', 'G2', 'G3']
+train_X, test_X, train_y, test_y = train_test_split(X, y, test_size=20, random_state=0)
 
-num_encoded = df.loc[:, nFeatures].values
-num_encoded = StandardScaler().fit_transform(num_encoded)
-num_encoded = pd.DataFrame(data=num_encoded, columns=nFeatures)
-
-labelFeatures = ['school', 'sex', 'age', 'address', 'famsize', 'Pstatus', 'Medu', 'Fedu', 'Mjob', 'Fjob', 'reason',
-             'guardian', 'traveltime', 'studytime', 'failures', 'schoolsup', 'famsup', 'paid', 'activities', 'nursery',
-             'higher', 'internet', 'romantic', 'famrel', 'freetime', 'goout', 'Dalc', 'Walc', 'health', 'absences',
-             'G1', 'G2', 'G3']
-
-label_encoded = []
-for feature in labelFeatures:
-  label_encoded.append(LabelEncoder().fit_transform(df[feature]))
-label_encoded = list(zip(*label_encoded))
-label_encoded = pd.DataFrame(data=label_encoded, columns=labelFeatures)
-
-x = pd.merge(num_encoded, label_encoded, right_index=True, left_index=True)
-y = df.loc[:, ['G1', 'G2', 'G3']].values
-
-targetDataframe = pd.DataFrame(np.mean(df.loc[:, ['G1', 'G2', 'G3']], axis=1), columns=['average'])
-
+plt.scatter(train_X[:, 0], train_X[:, 1], c=train_y, cmap='winter')
